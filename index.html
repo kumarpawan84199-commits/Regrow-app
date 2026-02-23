@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ReGrow - Your Self Growth Journey</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+text-align:center;
+}
+.screen{
+display:none;
+padding:30px;
+}
+.active{
+display:block;
+}
+button{
+padding:12px 25px;
+border:none;
+border-radius:8px;
+background:#00c853;
+color:white;
+font-size:16px;
+margin-top:20px;
+cursor:pointer;
+}
+input{
+padding:10px;
+margin:10px;
+border-radius:6px;
+border:none;
+}
+#tree{
+font-size:120px;
+margin-top:20px;
+}
+.small{
+font-size:14px;
+opacity:0.7;
+}
+.price{
+background:#ffffff20;
+padding:15px;
+margin:10px;
+border-radius:10px;
+}
+.fail{
+background:#d50000;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGO SCREEN -->
+<div id="logo" class="screen active">
+<h1>🌱 ReGrow</h1>
+<p class="small">Build Discipline. Build Yourself.</p>
+</div>
+
+<!-- INTRO SCREEN -->
+<div id="intro" class="screen">
+<h2>Why Self-Control Matters</h2>
+<p>
+• Improves focus and confidence<br>
+• Builds mental strength<br>
+• Increases productivity<br>
+• Strengthens discipline
+</p>
+<button onclick="next('login')">Let's Begin Your Journey</button>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="login" class="screen">
+<h2>Create Account</h2>
+<input type="email" placeholder="Email"><br>
+<input type="password" placeholder="Password"><br>
+<button onclick="next('q1')">Continue</button>
+<p class="small">Sign in with Google (Demo)</p>
+</div>
+
+<!-- QUESTION 1 -->
+<div id="q1" class="screen">
+<h2>What is your age?</h2>
+<input type="number" id="age"><br>
+<button onclick="next('q2')">Next</button>
+</div>
+
+<!-- QUESTION 2 -->
+<div id="q2" class="screen">
+<h2>How many years has the habit continued?</h2>
+<input type="number" id="years"><br>
+<button onclick="calculate()">Calculate</button>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen">
+<h2>Your Time Investment</h2>
+<p id="calcResult"></p>
+<button onclick="next('payment')">Let’s Grow Your Tree</button>
+</div>
+
+<!-- PAYMENT -->
+<div id="payment" class="screen">
+<h2>Premium Access</h2>
+<div class="price">₹9 / Year</div>
+<div class="price">₹99 / Lifetime</div>
+<button onclick="next('main')">Unlock Premium (Demo)</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="main" class="screen">
+<h2>Your Growth Journey</h2>
+<div id="tree">🌱</div>
+<h3 id="timer"></h3>
+<button class="fail" onclick="resetTree()">I Failed Today</button>
+</div>
+
+<script>
+
+// auto logo screen change
+setTimeout(()=>{ next('intro'); },2000);
+
+function next(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function calculate(){
+let years=document.getElementById("years").value;
+let days=years*365;
+let hours=days*24;
+let seconds=hours*3600;
+document.getElementById("calcResult").innerHTML=
+days+" Days<br>"+hours+" Hours<br>"+seconds+" Seconds";
+next('result');
+}
+
+// TREE SYSTEM
+let start=localStorage.getItem("start");
+if(!start){
+start=Date.now();
+localStorage.setItem("start",start);
+}
+
+function updateTimer(){
+let now=Date.now();
+let diff=now-start;
+
+let days=Math.floor(diff/86400000);
+let hours=Math.floor(diff/3600000)%24;
+let minutes=Math.floor(diff/60000)%60;
+let seconds=Math.floor(diff/1000)%60;
+
+document.getElementById("timer").innerHTML=
+days+"d "+hours+"h "+minutes+"m "+seconds+"s";
+
+let tree="🌱";
+if(days>=30) tree="🌿";
+if(days>=180) tree="🌳";
+if(days>=365) tree="🌲";
+
+document.getElementById("tree").innerHTML=tree;
+}
+
+function resetTree(){
+start=Date.now();
+localStorage.setItem("start",start);
+}
+
+setInterval(updateTimer,1000);
+
+</script>
+</body>
+</html>
